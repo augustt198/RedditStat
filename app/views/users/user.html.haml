@@ -1,0 +1,19 @@
+%h1
+  Stats on
+  = @username
+Link Karma:
+= @about["link_karma"]
+%br
+Comment Karma:
+= @about["comment_karma"]
+%br
+%br
+Posts per subreddit:
+%br
+- @subreddits_count.each do |s|
+  = s[0] + ' = ' + s[1].to_s
+  %br
+%br
+%br
+Total posts:
+= @comments.length

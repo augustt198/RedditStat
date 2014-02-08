@@ -1,0 +1,6 @@
+%h1 Welcome to RedditStat!
+
+= form_tag("/user_search", method: 'get') do
+  = label_tag(:user, "Search for a user")
+  = text_field_tag(:user)
+  = submit_tag("Go!")
