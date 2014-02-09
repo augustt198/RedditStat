@@ -1,2 +1,9 @@
 - flash.each do |name, msg|
-  %div{:class => 'flash flash-' + name.to_s}= msg
+  %div{:class => 'alert alert-dismissable alert-' + name.to_s}
+    - if name.to_s == 'danger'
+      %i{:class => 'fa fa-fw fa-exclamation-circle'}
+    - if name.to_s == 'warning'
+      %i{:class => 'fa fa-fw fa-warning'}
+    = msg
+    %button{type: 'button', :class => 'close', 'data-dismiss' => 'alert', 'aria-hidden' => 'true'}
+      %i{:class => 'fa fa-times'}

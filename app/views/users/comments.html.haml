@@ -1,0 +1,23 @@
+%h1.heading
+  Recent comments from
+  = @username
+#chart
+  %svg{style: 'width:600px; height: 600px;'}
+
+:javascript
+  nv.addGraph(function() {
+    var chart = nv.models.pieChart()
+        .x(function(d) { return d.label })
+        .y(function(d) { return d.value })
+        .showLabels(true);
+
+      d3.select("#chart svg")
+          .datum(exampleData())
+        .transition().duration(1200)
+          .call(chart);
+
+    return chart;
+  });
+  function exampleData() {
+    return jQuery.parseJSON('#{@data.to_s}')
+  }

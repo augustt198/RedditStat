@@ -1,6 +1,10 @@
-%h1 Welcome to RedditStat!
 
-= form_tag("/user_search", method: 'get') do
-  = label_tag(:user, "Search for a user")
-  = text_field_tag(:user)
-  = submit_tag("Go!")
+= form_tag("/user_search", method: 'get', :class => 'search' ) do
+  .input-group
+    = text_field_tag :user,
+      "",
+      :class => 'form-control input-lg',
+      :placeholder => 'Search for a user',
+      :autofocus => 'true'
+    %span.input-group-btn
+      = submit_tag "Go!", :class => 'btn btn-success btn-lg'

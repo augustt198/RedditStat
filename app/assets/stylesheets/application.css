@@ -12,6 +12,23 @@
  *= require_tree .
  */
 
+body {
+  padding-top: 40px;
+  font-family: 'Lato', sans-serif, serif !important;
+}
+
+.container {
+  width: 680px !important;
+}
+
+body .nav > li > a {
+  padding: 10px 25px;
+}
+
+body .nav > li > a i {
+  margin-left: 10px;
+}
+
 
 .flash {
   width:600px;
@@ -24,4 +41,25 @@
 
 .flash-error {
   background-color: rgb(255, 178, 178);
+}
+
+
+.search {
+  width: 60%;
+  margin: 100px auto 0;
+}
+
+.search .btn {
+  padding: 11px 16px 10px;
+}
+
+
+.heading {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 40px
+}
+
+#chart {
+  font-family: 'Lato', sans-serif, serif !important;
 }

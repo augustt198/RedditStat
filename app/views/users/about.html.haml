@@ -1,0 +1,13 @@
+%h1.heading
+  About
+  = @username
+  %hr{style: 'width:400px;'}
+%h2.heading
+  Link Karma
+  %span{:class => 'label label-warning'}= @about["link_karma"]
+%h2.heading
+  Comment Karma
+  %span{:class => 'label label-warning'}= @about["comment_karma"]
+%h2.heading
+  Account Age
+  %span{:class => 'label label-warning'}= time_ago_in_words(Time.at(@about["created"])) + ' old'

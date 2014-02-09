@@ -89,3 +89,30 @@ def user_comment_percentiles(username)
   end
   return {data: groups}
 end
+
+def user_comment_data(username)
+  base = "http://www.reddit.com/user/" + username + '/comments.json?'
+  data = Net::HTTP.get_response(URI.parse(base)).body
+  json = JSON.parse(data)
+  subreddits = Hash.new
+  times = []
+  c_count = 0
+  json["data"]["children"].each do |comment|
+    c_count += 1
+    c_data = comment["data"]
+    if subreddits[c_data["subreddit"]] == nil
+      subreddits[c_data["subreddit"]] = 1
+    else
+      subreddits[c_data["subreddit"]] += 1
+    end
+    times << Time.at(c_data["created"])
+  end
+  groups = []
+  subreddits.each do |s|
+    group = Hash.new
+    group["label"] = s[0]
+    group["value"] = (s[1].to_f / c_count) * 100
+    groups << group
+  end
+  return {data: groups, times: times}
+end

@@ -1,12 +1,35 @@
 %head
   %title RedditStat
   = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+  %script{src: 'http://d3js.org/d3.v3.min.js'}
+  %script{src: '/assets/nv.d3.min.js'}
+  %script{src: 'http://code.jquery.com/jquery-1.10.1.min.js'}
+  %script{:src=>"//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"}
+  %link{src: '/assets/nv.d3.min.css', rel: 'stylesheets'}
+  %link{:href=>"//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", :rel=>"stylesheet"}
+  %link{:href=>'http://fonts.googleapis.com/css?family=Lato:300,400,700', :rel=>'stylesheet', :type=>'text/css'}
+  %link{:href=>"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", :rel=>"stylesheet"}
   = javascript_include_tag "application", "data-turbolinks-track" => true
   = csrf_meta_tags
 
+
 %body
 
-  = render 'layouts/partials/flash'
-  = yield
+  .container
+    - if params[:controller] == 'users'
+      %ul.nav.nav-tabs
+        %li{:class => @page == 'about' ? 'active' : ''}
+          %a{href: "/user/#{@username}"}
+            About
+            %i{:class => 'fa fa-user'}
+        %li{:class => @page == 'comments' ? 'active' : ''}
+          %a{href: "/user/#{@username}/comments"}
+            Comments
+            %i{:class => 'fa fa-comment'}
+        %li{:class => @page == 'submissions' ? 'active' : ''}
+          %a{href: "/user/#{@username}/submissions"}
+            Submissions
+            %i{:class => 'fa fa-copy'}
 
-%script{src: 'http://d3js.org/d3.v3.min.js'}
+    = render 'layouts/partials/flash'
+    = yield
