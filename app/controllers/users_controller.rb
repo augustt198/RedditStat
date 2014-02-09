@@ -14,6 +14,9 @@ class UsersController < ApplicationController
 
   def user_search
     username = params[:user]
+    if username.start_with?("/u/")
+      username.gsub!("/u/", "")
+    end
     if !user_exists?(username)
       flash[:danger] = "User not found"
       redirect_to '/'

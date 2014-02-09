@@ -20,6 +20,10 @@
 %h2.heading
   Account Age
   %span{:class => 'label label-warning'}= time_ago_in_words(Time.at(@data["about"]["created"])) + ' old'
+%h2.heading
+  Moderator
+  %span{:class => 'label label-' + (@data["about"]["is_mod"] == true ? 'success' : 'danger')}
+    = (@data["about"]["is_mod"] == true ? 'Yes' : 'No')
 %br
 
 
@@ -98,7 +102,7 @@
 
     chart.xAxis
         .showMaxMin(false)
-        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d * 1000))});
 
     chart.yAxis
         .tickFormat(d3.format(',.2f'));
@@ -120,7 +124,7 @@
 
     chart.xAxis
         .showMaxMin(false)
-        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d * 1000)) });
 
     chart.yAxis
         .tickFormat(d3.format(',.2f'));
