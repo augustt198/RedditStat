@@ -9,7 +9,6 @@
   %link{:href=>"//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css", :rel=>"stylesheet"}
   %link{:href=>'http://fonts.googleapis.com/css?family=Lato:300,400,700', :rel=>'stylesheet', :type=>'text/css'}
   %link{:href=>"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css", :rel=>"stylesheet"}
-  = javascript_include_tag "application", "data-turbolinks-track" => true
   = csrf_meta_tags
 
 
@@ -17,7 +16,7 @@
 
   .container
     - if params[:controller] == 'users'
-      %ul.nav.nav-tabs
+      %ul.nav.nav-tabs.nav-justified
         %li{:class => @page == 'about' ? 'active' : ''}
           %a{href: "/user/#{@username}"}
             About
@@ -33,3 +32,9 @@
 
     = render 'layouts/partials/flash'
     = yield
+    - if params[:controller] == 'users'
+      #footer
+        .container{style: 'text-align: center;'}
+          %a{:class => 'btn btn-success'}
+            %i{:class => 'fa fa-fw fa-file'}
+            JSON

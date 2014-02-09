@@ -1,8 +1,10 @@
 class JsonController < ApplicationController
 
-  def comment_percentiles
+  require 'json'
+
+  def user
     username = params[:username]
-    data = user_comment_percentiles(username)
+    data = user_data(username)
     if params[:formatted] == "true"
       render :json => JSON.pretty_generate(data)
     else

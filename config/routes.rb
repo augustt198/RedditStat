@@ -7,6 +7,6 @@ RedditStat::Application.routes.draw do
   match 'user_search' => 'users#user_search', via: [:get]
 
   # JSON
-  match 'json/comment_percentile/:username' => 'json#comment_percentiles', via: [:get]
+  match 'json/:username' => 'json#user', via: [:get]
 
 end
