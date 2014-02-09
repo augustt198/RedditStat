@@ -140,30 +140,24 @@ def user_data(username)
 
   # Calculate Comments
   comment_count = 0
-  upvote_data = []
-  downvote_data = []
+  karma_data = []
   data["comment_percentiles"] = Hash.new
-  data["upvotes"] = []
-  data["downvotes"] = []
+  data["comment_karma"] = []
   json["data"]["children"].each do |comment|
     comment_count += 1
     comment_data = comment["data"]
     subreddit = comment_data["subreddit"]
-    ups = comment_data["ups"]
-    downs = comment_data["downs"]
+    karma = comment_data["ups"] - comment_data["downs"]
     time = comment_data["created"].to_i
     if data["comment_percentiles"][subreddit] == nil
       data["comment_percentiles"][subreddit] = 1
     else
       data["comment_percentiles"][subreddit] += 1
     end
-    upvote_data << [time, ups]
-    downvote_data << [time, downs]
+    karma_data << [time, karma]
   end
-  upvotes_group = {"key" => "Comment Upvotes", "values" => upvote_data}
-  data["upvotes"] << upvotes_group
-  downvotes_group = {"key" => "Comment Downvotes", "values" => downvote_data}
-  data["downvotes"] << downvotes_group
+  karma_group = {"key" => "Comment Karma", "values" => karma_data}
+  data["comment_karma"] << karma_group
   # Calculate percentiles
   groups = []
   data["comment_percentiles"].each do |c|
@@ -181,28 +175,24 @@ def user_data(username)
 
   #Calculate submissions
   submission_count = 0
-  upvote_data = []
-  downvote_data = []
+  karma_data = []
+  data["link_karma"] = []
   data["submission_percentiles"] = Hash.new
   json["data"]["children"].each do |submitted|
     submission_count += 1
     submit_data = submitted["data"]
     subreddit = submit_data["subreddit"]
-    ups = submit_data["ups"]
-    downs = submit_data["downs"]
+    karma = submit_data["ups"] - submit_data["downs"]
     time = submit_data["created"].to_i
     if data["submission_percentiles"][subreddit] == nil
       data["submission_percentiles"][subreddit] = 1
     else
       data["submission_percentiles"][subreddit] += 1
     end
-    upvote_data << [time, ups]
-    downvote_data << [time, downs]
+    karma_data << [time, karma]
   end
-  upvotes_group = {"key" => "Submission Upvotes", "values" => upvote_data}
-  data["upvotes"] << upvotes_group
-  downvotes_group = {"key" => "Submission Downvotes", "values" => downvote_data}
-  data["downvotes"] << downvotes_group
+  karma_group = {"key" => "Link Karma", "values" => karma_data}
+  data["link_karma"] << karma_group
   # Calculate percentiles
   groups = []
   data["submission_percentiles"].each do |c|

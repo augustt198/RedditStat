@@ -44,14 +44,14 @@
 #submissions-pie
   %svg{style: 'width:600px; height: 600px;'}
 
-%h1.heading Times Upvoted
+%h1.heading Comment Karma Gained
 %hr{style: 'width:400px;'}
-#upvotes
+#comment-karma
   %svg{style: 'width:600px; height: 600px;'}
 
-%h1.heading Times Downvoted
+%h1.heading Link Karma Gained
 %hr{style: 'width:400px;'}
-#downvotes
+#link-karma
   %svg{style: 'width:600px; height: 600px;'}
 
 %br
@@ -107,8 +107,8 @@
     chart.yAxis
         .tickFormat(d3.format(',.2f'));
 
-    d3.select('#upvotes svg')
-      .datum(upvotes())
+    d3.select('#comment-karma svg')
+      .datum(commentKarma())
         .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -129,8 +129,8 @@
     chart.yAxis
         .tickFormat(d3.format(',.2f'));
 
-    d3.select('#downvotes svg')
-      .datum(downvotes())
+    d3.select('#link-karma svg')
+      .datum(linkKarma())
         .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -146,10 +146,10 @@
   function submissionsPie() {
     return jQuery.parseJSON('#{@data["submission_percentiles"].to_json}')
   }
-  function upvotes() {
-    return jQuery.parseJSON('#{@data["upvotes"].to_json}')
+  function commentKarma() {
+    return jQuery.parseJSON('#{@data["comment_karma"].to_json}')
   }
-  function downvotes() {
-    return jQuery.parseJSON('#{@data["downvotes"].to_json}')
+  function linkKarma() {
+    return jQuery.parseJSON('#{@data["link_karma"].to_json}')
   }
 
