@@ -7,3 +7,4 @@ Example
 ==
 
 ![](http://i.imgur.com/OelJV65.png)
+![](http://i.imgur.com/xQEBbUV.png)
