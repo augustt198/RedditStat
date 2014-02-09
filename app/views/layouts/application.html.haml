@@ -15,26 +15,5 @@
 %body
 
   .container
-    - if params[:controller] == 'users'
-      %ul.nav.nav-tabs.nav-justified
-        %li{:class => @page == 'about' ? 'active' : ''}
-          %a{href: "/user/#{@username}"}
-            About
-            %i{:class => 'fa fa-user'}
-        %li{:class => @page == 'comments' ? 'active' : ''}
-          %a{href: "/user/#{@username}/comments"}
-            Comments
-            %i{:class => 'fa fa-comment'}
-        %li{:class => @page == 'submissions' ? 'active' : ''}
-          %a{href: "/user/#{@username}/submissions"}
-            Submissions
-            %i{:class => 'fa fa-copy'}
-
     = render 'layouts/partials/flash'
     = yield
-    - if params[:controller] == 'users'
-      #footer
-        .container{style: 'text-align: center;'}
-          %a{:class => 'btn btn-success'}
-            %i{:class => 'fa fa-fw fa-file'}
-            JSON

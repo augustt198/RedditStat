@@ -49,7 +49,12 @@ end
 
 def user_exists?(username)
   url = "http://www.reddit.com/user/" + username + ".json"
-  data = Net::HTTP.get_response(URI.parse(url)).body
+  begin
+    uri = URI.parse(url)
+  rescue URI::InvalidURIError
+    return false
+  end
+  data = Net::HTTP.get_response(uri).body
   json = JSON.parse(data)
   return json["error"] != 404
 end
@@ -146,7 +151,7 @@ def user_data(username)
     subreddit = comment_data["subreddit"]
     ups = comment_data["ups"]
     downs = comment_data["downs"]
-    time = comment_data["created"]
+    time = comment_data["created"].to_i
     if data["comment_percentiles"][subreddit] == nil
       data["comment_percentiles"][subreddit] = 1
     else
@@ -160,9 +165,14 @@ def user_data(username)
   downvotes_group = {"key" => "Comment Downvotes", "values" => downvote_data}
   data["downvotes"] << downvotes_group
   # Calculate percentiles
+  groups = []
   data["comment_percentiles"].each do |c|
-    data["comment_percentiles"][c[0]] = (c[1].to_f / comment_count) * 100
+    group = Hash.new
+    group["label"] = c[0]
+    group["value"] = (c[1].to_f / comment_count) * 100
+    groups << group
   end
+  data["comment_percentiles"] = groups
 
   # Load submission data
   url_ext = "/submitted.json"
@@ -180,7 +190,7 @@ def user_data(username)
     subreddit = submit_data["subreddit"]
     ups = submit_data["ups"]
     downs = submit_data["downs"]
-    time = submit_data["created"]
+    time = submit_data["created"].to_i
     if data["submission_percentiles"][subreddit] == nil
       data["submission_percentiles"][subreddit] = 1
     else
@@ -194,9 +204,14 @@ def user_data(username)
   downvotes_group = {"key" => "Submission Downvotes", "values" => downvote_data}
   data["downvotes"] << downvotes_group
   # Calculate percentiles
+  groups = []
   data["submission_percentiles"].each do |c|
-    data["submission_percentiles"][c[0]] = (c[1].to_f / submission_count) * 100
+    group = Hash.new
+    group["label"] = c[0]
+    group["value"] = (c[1].to_f / submission_count) * 100
+    groups << group
   end
+  data["submission_percentiles"] = groups
 
   return data
 end

@@ -1,0 +1,151 @@
+- time = Time.at(@data["about"]["created"])
+- now = Time.now
+- if time.month == now.month && time.day = now.day
+  .alert.alert-success
+    %i{:class => 'fa fa-fw fa-gift'}
+    It's
+    = @username + "'s"
+    cake day!
+
+%h1.heading
+  About
+  = @username
+  %hr{style: 'width:400px;'}
+%h2.heading
+  Link Karma
+  %span{:class => 'label label-warning'}= @data["about"]["link_karma"]
+%h2.heading
+  Comment Karma
+  %span{:class => 'label label-warning'}= @data["about"]["comment_karma"]
+%h2.heading
+  Account Age
+  %span{:class => 'label label-warning'}= time_ago_in_words(Time.at(@data["about"]["created"])) + ' old'
+%br
+
+
+%h1.heading
+  Recent comments from
+  = @username
+%hr{style: 'width:400px;'}
+%h2.heading Breakdown by Subreddit
+#comments-pie
+  %svg{style: 'width:600px; height: 600px;'}
+%br
+
+%h1.heading
+  Recent submissions from
+  = @username
+%hr{style: 'width:400px;'}
+%h2.heading Breakdown by Subreddit
+#submissions-pie
+  %svg{style: 'width:600px; height: 600px;'}
+
+%h1.heading Times Upvoted
+%hr{style: 'width:400px;'}
+#upvotes
+  %svg{style: 'width:600px; height: 600px;'}
+
+%h1.heading Times Downvoted
+%hr{style: 'width:400px;'}
+#downvotes
+  %svg{style: 'width:600px; height: 600px;'}
+
+%br
+%br
+%center
+  %a{href: '/json/' + @username + '?formatted=true', :class => 'btn btn-primary btn-lg'} Get The JSON
+- 5.times do
+  %br
+
+
+:javascript
+  // comments pie chart
+  nv.addGraph(function() {
+    var chart = nv.models.pieChart()
+        .x(function(d) { return d.label })
+        .y(function(d) { return d.value })
+        .showLabels(true);
+
+      d3.select("#comments-pie svg")
+          .datum(commentsPie())
+        .transition().duration(1200)
+          .call(chart);
+
+    return chart;
+  });
+
+  // submissions pie chart
+  nv.addGraph(function() {
+    var chart = nv.models.pieChart()
+        .x(function(d) { return d.label })
+        .y(function(d) { return d.value })
+        .showLabels(true);
+
+      d3.select("#submissions-pie svg")
+          .datum(submissionsPie())
+        .transition().duration(1200)
+          .call(chart);
+
+    return chart;
+  });
+
+  // upvotes
+  nv.addGraph(function() {
+    var chart = nv.models.stackedAreaChart()
+                  .x(function(d) { return d[0] })
+                  .y(function(d) { return d[1] })
+                  .clipEdge(true);
+
+    chart.xAxis
+        .showMaxMin(false)
+        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+
+    chart.yAxis
+        .tickFormat(d3.format(',.2f'));
+
+    d3.select('#upvotes svg')
+      .datum(upvotes())
+        .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.stackedAreaChart()
+                  .x(function(d) { return d[0] })
+                  .y(function(d) { return d[1] })
+                  .clipEdge(true);
+
+    chart.xAxis
+        .showMaxMin(false)
+        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d)) });
+
+    chart.yAxis
+        .tickFormat(d3.format(',.2f'));
+
+    d3.select('#downvotes svg')
+      .datum(downvotes())
+        .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+
+  // datums
+  function commentsPie() {
+    return jQuery.parseJSON('#{@data["comment_percentiles"].to_json}')
+  }
+  function submissionsPie() {
+    return jQuery.parseJSON('#{@data["submission_percentiles"].to_json}')
+  }
+  function upvotes() {
+    return jQuery.parseJSON('#{@data["upvotes"].to_json}')
+  }
+  function downvotes() {
+    return jQuery.parseJSON('#{@data["downvotes"].to_json}')
+  }
+
