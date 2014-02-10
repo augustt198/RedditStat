@@ -1,6 +1,6 @@
-- time = Time.at(@data["about"]["created"])
-- now = Time.now
-- if time.month == now.month && time.day = now.day
+- time = Time.at(@data["about"]["created_utc"])
+- now = Time.now.utc
+- if time.month == now.month && time.day == now.day
   .alert.alert-success
     %i{:class => 'fa fa-fw fa-gift'}
     It's
