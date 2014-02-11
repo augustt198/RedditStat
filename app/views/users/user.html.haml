@@ -7,10 +7,11 @@
     = @username + "'s"
     cake day!
 
-%h1.heading
-  About
-  = @username
-  %hr{style: 'width:400px;'}
+%div{:style => 'margin: 30px 0 0'}
+  = render 'layouts/partials/search'
+
+%hr{:style => 'margin: 70px 0 80px'}
+
 %h2.heading
   Link Karma
   %span{:class => 'label label-warning'}= @data["about"]["link_karma"]
@@ -30,36 +31,39 @@
 %h1.heading
   Recent comments from
   = @username
-%hr{style: 'width:400px;'}
-%h2.heading Breakdown by Subreddit
+%hr{style: 'width:400px; margin: 20px auto 40px'}
 #comments-pie
-  %svg{style: 'width:600px; height: 600px;'}
+  %svg
 %br
 
 %h1.heading
   Recent submissions from
   = @username
-%hr{style: 'width:400px;'}
-%h2.heading Breakdown by Subreddit
+%hr{style: 'width:400px; margin: 20px auto 40px'}
 #submissions-pie
-  %svg{style: 'width:600px; height: 600px;'}
+  %svg
 
 %h1.heading Comment Karma Gained
 %hr{style: 'width:400px;'}
 #comment-karma
-  %svg{style: 'width:600px; height: 600px;'}
+  %svg
 
 %h1.heading Link Karma Gained
-%hr{style: 'width:400px;'}
+%hr{style: 'width:400px; margin: 20px auto 40px'}
 #link-karma
-  %svg{style: 'width:600px; height: 600px;'}
+  %svg
 
-%br
-%br
-%center
-  %a{href: '/json/' + @username + '?formatted=true', :class => 'btn btn-primary btn-lg'} Get The JSON
-- 5.times do
-  %br
+%hr{:style => 'margin: 70px 0 80px'}
+
+%div{:style => 'text-align: center; margin: 70px 0 100px'}
+  .btn-group
+    %a{href: '/json/' + @username + '?formatted=true', :class => 'btn btn-default btn-lg'}
+      %i{:class => 'fa fa-file-text-o', :style => 'margin-right: 7px'}
+      Get the JSON
+    %a{href: 'https://github.com/augustt198/RedditStat', :class => 'btn btn-default btn-lg'}
+      %i{:class => 'fa fa-github', :style => 'margin-right: 7px'}
+      View on Github
+
 
 
 :javascript

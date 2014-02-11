@@ -10,6 +10,7 @@ class UsersController < ApplicationController
       return
     end
     @data = user_data(@username)
+    @username = @data["about"]["name"]
   end
 
   def user_search

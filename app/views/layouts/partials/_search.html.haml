@@ -1,0 +1,9 @@
+= form_tag("/user_search", method: 'get', :class => 'search' ) do
+  .input-group
+    = text_field_tag :user,
+      @username != nil ? @username : '',
+      :class => 'form-control input-lg',
+      :placeholder => 'Search for a user',
+      :autofocus => 'true'
+    %span.input-group-btn
+      = submit_tag "Go!", :class => 'btn btn-primary btn-lg'
