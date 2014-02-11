@@ -126,6 +126,7 @@ def user_data(username)
   url_base = "http://www.reddit.com/user/" + username
   url_ext = "/about.json"
   data = Hash.new
+  last_seen = 0
 
   resp = Net::HTTP.get_response(URI.parse(url_base + url_ext)).body
   json = JSON.parse(resp)
@@ -149,6 +150,7 @@ def user_data(username)
     subreddit = comment_data["subreddit"]
     karma = comment_data["ups"] - comment_data["downs"]
     time = comment_data["created"].to_i
+    last_seen = time if time > last_seen
     if data["comment_percentiles"][subreddit] == nil
       data["comment_percentiles"][subreddit] = 1
     else
@@ -184,6 +186,7 @@ def user_data(username)
     subreddit = submit_data["subreddit"]
     karma = submit_data["ups"] - submit_data["downs"]
     time = submit_data["created"].to_i
+    last_seen = time if time > last_seen
     if data["submission_percentiles"][subreddit] == nil
       data["submission_percentiles"][subreddit] = 1
     else
@@ -202,6 +205,6 @@ def user_data(username)
     groups << group
   end
   data["submission_percentiles"] = groups
-
+  data["last_seen"] = last_seen
   return data
 end

@@ -20,7 +20,12 @@
   %span{:class => 'label label-warning'}= @data["about"]["comment_karma"]
 %h2.heading
   Account Age
-  %span{:class => 'label label-warning'}= time_ago_in_words(Time.at(@data["about"]["created"])) + ' old'
+  %span{:class => 'label label-warning'}
+    = time_ago_in_words(Time.at(@data["about"]["created"])) + ' old'
+%h2.heading
+  Last Seen
+  %span{:class => 'label label-warning'}
+    = time_ago_in_words(Time.at(@data["last_seen"])) + ' ago'
 %h2.heading
   Moderator
   %span{:class => 'label label-' + (@data["about"]["is_mod"] == true ? 'success' : 'danger')}
