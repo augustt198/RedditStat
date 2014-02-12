@@ -126,13 +126,13 @@ def user_data(username)
   url_base = "http://www.reddit.com/user/" + username
   url_ext = "/about.json"
   data = Hash.new
-  last_seen = 0
 
   resp = Net::HTTP.get_response(URI.parse(url_base + url_ext)).body
   json = JSON.parse(resp)
 
   # Add about data
   data["about"] = json["data"]
+  last_seen = data["about"]["created"]
 
   # Load comment data
   url_ext = "/comments.json"
