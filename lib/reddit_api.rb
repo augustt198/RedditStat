@@ -142,24 +142,35 @@ def user_data(username)
   # Calculate Comments
   comment_count = 0
   karma_data = []
+  cumulative_karma_data = []
   data["comment_percentiles"] = Hash.new
   data["comment_karma"] = []
-  json["data"]["children"].each do |comment|
+  data["comment_karma_cumulative"] = []
+  initial_karma = data["about"]["comment_karma"]
+  json["data"]["children"].each do |c|
+    k = c["data"]["ups"] - c["data"]["downs"]
+    initial_karma -= k
+  end
+  json["data"]["children"].reverse.each do |comment|
     comment_count += 1
     comment_data = comment["data"]
     subreddit = comment_data["subreddit"]
     karma = comment_data["ups"] - comment_data["downs"]
     time = comment_data["created"].to_i
     last_seen = time if time > last_seen
+    initial_karma += karma
     if data["comment_percentiles"][subreddit] == nil
       data["comment_percentiles"][subreddit] = 1
     else
       data["comment_percentiles"][subreddit] += 1
     end
     karma_data << [time, karma]
+    cumulative_karma_data << [time, initial_karma]
   end
   karma_group = {"key" => "Comment Karma", "values" => karma_data}
+  cumulative_karma_group = {"key" => "Comment Karma", "values" => cumulative_karma_data}
   data["comment_karma"] << karma_group
+  data["comment_karma_cumulative"] << cumulative_karma_group
   # Calculate percentiles
   groups = []
   data["comment_percentiles"].each do |c|
@@ -178,24 +189,35 @@ def user_data(username)
   #Calculate submissions
   submission_count = 0
   karma_data = []
+  cumulative_karma_data = []
   data["link_karma"] = []
+  data["link_karma_cumulative"] = []
   data["submission_percentiles"] = Hash.new
-  json["data"]["children"].each do |submitted|
+  initial_karma = data["about"]["link_karma"]
+  json["data"]["children"].each do |c|
+    k = c["data"]["ups"] - c["data"]["downs"]
+    initial_karma -= k
+  end
+  json["data"]["children"].reverse.each do |submitted|
     submission_count += 1
     submit_data = submitted["data"]
     subreddit = submit_data["subreddit"]
     karma = submit_data["ups"] - submit_data["downs"]
     time = submit_data["created"].to_i
     last_seen = time if time > last_seen
+    initial_karma += karma
     if data["submission_percentiles"][subreddit] == nil
       data["submission_percentiles"][subreddit] = 1
     else
       data["submission_percentiles"][subreddit] += 1
     end
     karma_data << [time, karma]
+    cumulative_karma_data << [time, initial_karma]
   end
   karma_group = {"key" => "Link Karma", "values" => karma_data}
+  cumulative_karma_group = {"key" => "Link Karma", "values" => cumulative_karma_data}
   data["link_karma"] << karma_group
+  data["link_karma_cumulative"] << cumulative_karma_group
   # Calculate percentiles
   groups = []
   data["submission_percentiles"].each do |c|

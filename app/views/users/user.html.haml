@@ -53,9 +53,19 @@
 #comment-karma.graph
   %svg
 
+%h1.heading Cumulative Comment Karma
+%hr{style: 'width:400px; margin: 20px auto 40px'}
+#cumulative-comment.graph
+  %svg
+
 %h1.heading Link Karma Gained
 %hr{style: 'width:400px; margin: 20px auto 40px'}
 #link-karma.graph
+  %svg
+
+%h1.heading Cumulative Link Karma
+%hr{style: 'width:400px; margin: 20px auto 40px'}
+#cumulative-link.graph
   %svg
 
 %hr{:style => 'margin: 70 px 0 80px'}
@@ -150,18 +160,70 @@
     return chart;
   });
 
+  nv.addGraph(function() {
+    var chart = nv.models.stackedAreaChart()
+                  .x(function(d) { return d[0] })
+                  .y(function(d) { return d[1] })
+                  .clipEdge(true);
+
+    chart.xAxis
+        .showMaxMin(false)
+        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d * 1000)) });
+
+    chart.yAxis
+        .tickFormat(d3.format(',.2f'));
+
+    d3.select('#cumulative-comment svg')
+      .datum(cumulativeComment())
+        .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.stackedAreaChart()
+                  .x(function(d) { return d[0] })
+                  .y(function(d) { return d[1] })
+                  .clipEdge(true);
+
+    chart.xAxis
+        .showMaxMin(false)
+        .tickFormat(function(d) { return d3.time.format('%x')(new Date(d * 1000)) });
+
+    chart.yAxis
+        .tickFormat(d3.format(',.2f'));
+
+    d3.select('#cumulative-link svg')
+      .datum(cumulativeLink())
+        .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
 
   // datums
   function commentsPie() {
-    return jQuery.parseJSON('#{@data["comment_percentiles"].to_json}')
+    return jQuery.parseJSON('#{@data["comment_percentiles"].to_json}');
   }
   function submissionsPie() {
-    return jQuery.parseJSON('#{@data["submission_percentiles"].to_json}')
+    return jQuery.parseJSON('#{@data["submission_percentiles"].to_json}');
   }
   function commentKarma() {
-    return jQuery.parseJSON('#{@data["comment_karma"].to_json}')
+    return jQuery.parseJSON('#{@data["comment_karma"].to_json}');
   }
   function linkKarma() {
-    return jQuery.parseJSON('#{@data["link_karma"].to_json}')
+    return jQuery.parseJSON('#{@data["link_karma"].to_json}');
+  }
+
+  function cumulativeComment() {
+    return jQuery.parseJSON('#{@data["comment_karma_cumulative"].to_json}');
+  }
+
+  function cumulativeLink() {
+    return jQuery.parseJSON('#{@data["link_karma_cumulative"].to_json}');
   }
 
