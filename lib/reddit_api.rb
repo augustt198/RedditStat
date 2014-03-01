@@ -195,14 +195,22 @@ def user_data(username)
   data["submission_percentiles"] = Hash.new
   initial_karma = data["about"]["link_karma"]
   json["data"]["children"].each do |c|
+    if c["data"]["is_self"]
+      next
+    end
     k = c["data"]["ups"] - c["data"]["downs"]
+    k = 0 if k < 0
     initial_karma -= k
   end
   json["data"]["children"].reverse.each do |submitted|
     submission_count += 1
     submit_data = submitted["data"]
+    if submit_data["is_self"]
+      next
+    end
     subreddit = submit_data["subreddit"]
     karma = submit_data["ups"] - submit_data["downs"]
+    karma = 0 if karma < 0
     time = submit_data["created"].to_i
     last_seen = time if time > last_seen
     initial_karma += karma
